@@ -19,9 +19,7 @@ list(APPEND CMAKE_MODULE_PATH "${WENET_CMAKE_PATH}")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -pthread -fPIC")
 include(openfst)
-# include(${WENET_CMAKE_PATH}/openfst.cmake)
-# include(${WENET_CMAKE_PATH}/gflags.cmake)
-# include(${WENET_CMAKE_PATH}/glogs.cmake)
+include(glog)
 
 add_subdirectory(src/pybind11)
 include_directories(
@@ -29,7 +27,11 @@ include_directories(
   )
 add_library(ctc_prefix_beam_search STATIC
   src/wenet/runtime/core/decoder/ctc_prefix_beam_search.cc
+  src/wenet/runtime/core/decoder/context_graph.cc
+  src/wenet/runtime/core/utils/utils.cc
+  src/wenet/runtime/core/utils/string.cc
   )
+target_link_libraries(ctc_prefix_beam_search PUBLIC fst)
 
 # ctc decoder
 pybind11_add_module(_ctcdecoder src/ctcdecoder.cc)

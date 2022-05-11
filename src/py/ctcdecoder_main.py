@@ -1,7 +1,3 @@
-# ctcdecoder
-ctc decoder binding for wenet runtime
-
-```python
 from torch.nn.utils.rnn import pad_sequence
 from ctcdecoder import CTCDecoder
 import torch
@@ -19,4 +15,3 @@ print(pad_sequence(decoder.decode(inputs, seq_len), batch_first=True, padding_va
 #        [ 1,  2],
 #        [ 1, -1]])
 #
-```
