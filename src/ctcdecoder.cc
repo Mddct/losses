@@ -1,6 +1,7 @@
 #include "decoder/ctc_prefix_beam_search.h"
 #include "decoder/search_interface.h"
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 #include <vector>
 
 struct DecodeResult {
@@ -64,7 +65,7 @@ ctc_beam_search_decoder(float *data, int max_time, int bs, int num_classes,
   return std::move(results);
 }
 
-PYBIND11_MODULE(_ctc_decoder, m) {
+PYBIND11_MODULE(_ctcdecoder, m) {
   m.doc() = "ctc decoder"; // optional module docstring
 
   py::class_<DecodeResult>(m, "_DecodeResult")
