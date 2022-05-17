@@ -3,11 +3,13 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <vector>
+#include <cstdio>
+#include <cinttypes>
 
 struct DecodeResult {
   std::vector<std::vector<int>> hypotheses;
   std::vector<float> likelihood;
-  
+
   explicit DecodeResult() {}
 };
 
@@ -20,13 +22,14 @@ std::vector<DecodeResult>
 ctc_beam_search_decoder(uintptr_t pdata, int max_time, int bs, int num_classes,
                         uintptr_t psequence_length, int n_sequence_length,
                         int beam_width, int top_path) {
-  std::vector<DecodeResult> results;
-  float *data = reinterpret_cast<float *>(pdata);
+ std::vector<DecodeResult> results;
   if (max_time <= 0 || bs <= 0 || num_classes <= 0 || n_sequence_length <= 0 ||
       beam_width <= 0 || top_path <= 0) {
     return results;
   }
-  int *sequence_length = reinterpret_cast<int *>(psequence_length);
+
+  auto *data = reinterpret_cast<float *>(pdata);
+  auto *sequence_length = reinterpret_cast<std::int64_t *>(psequence_length);
 
   wenet::CtcPrefixBeamSearchOptions opts;
   opts.first_beam_size = beam_width;

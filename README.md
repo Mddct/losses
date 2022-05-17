@@ -1,6 +1,11 @@
 # ctcdecoder
 ctc decoder binding for wenet runtime
 
+TODO:
+- [ ] suport batch ctc decode
+- [ ] suport chunk state ctc decode
+- [ ] suport torch sparse tensor 
+
 ```python
 from torch.nn.utils.rnn import pad_sequence
 from ctcdecoder import CTCDecoder
@@ -13,10 +18,9 @@ inputs = torch.tensor(
 inputs = inputs.log()
 seq_len = torch.tensor([3])
 decoder = CTCDecoder(3,3)
-print(pad_sequence(decoder.decode(inputs, seq_len), batch_first=True, padding_value=-1))
-
-#tensor([[ 2,  1],
-#        [ 1,  2],
-#        [ 1, -1]])
-#
+print(decoder.decode(inputs, seq_len))
+[[tensor([2, 1]), tensor([1, 2]), tensor([1])], 
+[tensor([2, 1]), tensor([1, 2]), tensor([1])]]
 ```
+
+
