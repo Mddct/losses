@@ -27,6 +27,6 @@ std::vector<DecodeResult> ctc_beam_search_decoder(uintptr_t pdata, int max_time,
 std::vector<int64_t> EditDistance(uintptr_t sdata, int s_max_seq_len,
                                   uintptr_t s_sequence_length, uintptr_t tdata,
                                   int t_max_seq_len,
-                                  uintptr_t t_sequence_length, int bs) {
+                                  uintptr_t t_sequence_length, int bs);
 
 #endif // CTC_DECODER_H_
