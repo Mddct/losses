@@ -33,6 +33,13 @@ add_library(ctc_prefix_beam_search STATIC
   )
 target_link_libraries(ctc_prefix_beam_search PUBLIC fst)
 
+include_directories(src)
+add_library(ctc_decoder STATIC
+  src/ctc_decoder.cc
+  src/edit_distance.cc
+  )
+target_link_libraries(ctc_decoder ctc_prefix_beam_search)
+
 # ctc decoder
-pybind11_add_module(_ctcdecoder src/ctcdecoder.cc)
-target_link_libraries(_ctcdecoder PRIVATE ctc_prefix_beam_search)
+pybind11_add_module(_ctcdecoder py/cpp/ctcdecoder.cc)
+target_link_libraries(_ctcdecoder PRIVATE ctc_decoder)
