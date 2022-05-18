@@ -31,7 +31,12 @@ class CTCDecoder:
             self.top_paths,
         )
         # TODO: timestamp and prob
-        b_nbest = [ torch.tensor(result) for bs in decoder_result for result in bs.hypotheses]
+        b_nbest = []
+        for bs in decoder_result:
+            result = []
+            for res in bs.hypotheses:
+                result.append(torch.tensor(res))
+
+            b_nbest.append(result)
 
         return b_nbest
-

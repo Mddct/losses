@@ -6,11 +6,6 @@
 #include <iostream>
 #include <vector>
 
-template <typename T, typename Cmp>
-T LevenshteinDistance(const std::vector<T> &s, const std::int64_t s_seq_size,
-                      const std::vector<T> &t, const std::int64_t t_seq_size,
-                      const Cmp &cmp);
-
 struct DecodeResult {
   std::vector<std::vector<int>> hypotheses;
   std::vector<float> likelihood;

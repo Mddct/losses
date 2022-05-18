@@ -41,5 +41,5 @@ add_library(ctc_decoder STATIC
 target_link_libraries(ctc_decoder ctc_prefix_beam_search)
 
 # ctc decoder
-pybind11_add_module(_ctcdecoder py/cpp/ctcdecoder.cc)
+pybind11_add_module(_ctcdecoder py/cpp/binding.cc)
 target_link_libraries(_ctcdecoder PRIVATE ctc_decoder)
