@@ -25,3 +25,9 @@ truth = torch.tensor([[4,5,6], [4, 5, 6]])
 t_lens = torch.tensor([3,3])
 
 print(edit_distance(hyp,hyp_lens,truth, t_lens)
+
+mwer=CTCMWERLoss(8)
+labels=torch.tensor([[1,0,2]])
+labels_length = torch.tensor([3])
+print(mwer.forward(inputs, labels, labels_length, torch.tensor(3)))
+#tensor(0.0136) 
