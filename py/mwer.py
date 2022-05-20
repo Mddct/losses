@@ -37,14 +37,13 @@ class CTCMWERLoss():
                 hyp_lens = torch.sum(torch.where(n==-1, 0, 1), dim=1)
                 labels_repeat = labels[i].unsqueeze(0).repeat(n.size(0), 1)
                 labels_length_repeat = labels_length[i].unsqueeze(0).repeat(n.size(0))
-                print(n.size(), labels_repeat.size())
                 w_e_n.append(edit_distance(n, hyp_lens, labels_repeat, labels_length_repeat).unsqueeze(0))
 
             return torch.cat(w_e_n, dim=0).to(torch.float32)
 
         # Computes log distribution.
         # log(sum(exp(elements across dimensions of a tensor)))
-        sum_nbest_log_pdf = torch.logsumexp(nbest_log_pdf, axis=1) # (batch_size)
+        sum_nbest_log_pdf = torch.logsumexp(nbest_log_pdf, 1, True) # (batch_size)
         # Re-normalized over just the N-best hypotheses.
         normal_nbest_pdf = torch.exp(nbest_log_pdf-sum_nbest_log_pdf) # [bs, top_path]
 
