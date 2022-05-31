@@ -1,7 +1,8 @@
 import torch
 
 class FocalLoss(torch.nn.Module):
-  
+    ''' (Note): This is the simple version of the implementation。 Not for class based just for sequence leval
+    '''
     def __init__(
         self,
         alpha: float = 0.5,
