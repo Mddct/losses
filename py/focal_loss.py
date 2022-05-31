@@ -33,3 +33,5 @@ class SequenceFocalLoss(torch.nn.Module):
           coefficient = coefficient.detach()
        
         return  -self.alpha * coefficient * logits 
+
+  # TODO: class based focal losses
