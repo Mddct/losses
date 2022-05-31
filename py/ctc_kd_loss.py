@@ -32,17 +32,16 @@ class CTCKDLoss(torch.nn.Module):
         """
         t_nbest_decoded, _ = self.ctc_prefix_beam_decoer.decode(
             t_logits, t_logits_length)
-        loss = []
-        ## wrong implement to fix it
-        ## refine ctc decoder return nbest_decodes[j] is a batch one bestresult
+        # [batch_size, top_path, max_seq_len] -> [top_path, batch_size, max_seq_len]
+        t_nbest = t_nbest.transpose(0,1)
+        # (B, L, Nvocab) -> (L, B, Nvocab)
+        s_logits = s_logits.transpose(0, 1)
         for (i,n) in enumerate(t_nbest_decoded):
-          hyp_lens = torch.sum(torch.where(n==-1, 0, 1), dim=1)
-          labels_repeat = labels[i].unsqueeze(0).repeat(n.size(0), 1)
-          labels_length_repeat = labels_length[i].unsqueeze(0).repeat(n.size(0))
+          # n:  batch_size, max_seq_len]
+          #s_onebest_hyp_lens: 
+          s_onebest_hyp_lens = torch.sum(torch.where(n==-1, 0, 1), dim=1)
           
-          # (B, L, Nvocab) -> (L, B, Nvocab)
-          s_logits = s_logits.transpose(0, 1)
-          loss.append(self.ctc_loss(s_logits, s_logits_length, s_logits_length, labels_length_repeat)/s_logits_length.size(0))
+          loss.append(self.ctc_loss(s_logits, n, s_logits_length, s_onebest_hyp_lens)/s_logits_length.size(0))
           
         loss = torch.cat(loss, dim=0)
         return torch.sum(loss) / self.nbest
