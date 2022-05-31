@@ -2,6 +2,9 @@
 ctc decoder binding for wenet runtime
 
 TODO:
+- [ ] entmax and entmax losses
+- [ ] kd
+- [ ] focal losses
 - [ ] suport batch ctc decode
 - [ ] suport chunk state ctc decode
 - [ ] suport torch sparse tensor 
