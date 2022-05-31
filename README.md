@@ -6,10 +6,12 @@ loss functions associated with ctc
 TODO:
 - [ ] entmax and entmax losses
 - [ ] kd
-- [ ] focal losses
-- [ ] suport batch ctc decode
+- [x] suport batch ctc decode not parallel
 - [ ] suport chunk state ctc decode
 - [ ] suport torch sparse tensor 
+- [x] sequence focal loss
+- [ ] custom focal loss
+- [ ] focal logits for mwer
 - [x] mwer loss ssupport
 
 ```python
