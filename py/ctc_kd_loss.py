@@ -33,6 +33,7 @@ class CTCKDLoss(torch.nn.Module):
         t_nbest_decoded, _ = self.ctc_prefix_beam_decoer.decode(
             t_logits, t_logits_length)
         loss = []
+        ## wrong implement to fix it
         for (i,n) in enumerate(t_nbest_decoded):
           hyp_lens = torch.sum(torch.where(n==-1, 0, 1), dim=1)
           labels_repeat = labels[i].unsqueeze(0).repeat(n.size(0), 1)
