@@ -23,7 +23,7 @@ class SequenceFocalLoss(torch.nn.Module):
     def forward(self, logits: torch.Tensor) -> torch.Tensor:
         """Calculate focal loss.
         Args:
-            logits: [..., logit]
+            logits: [..., logit], positive log probos
         Returns:
             loss[i..., j] = - αₜ(1-pₜ)ˠlog(pₜ)
         """
@@ -32,6 +32,6 @@ class SequenceFocalLoss(torch.nn.Module):
         if self.stop_gradient_on_focal_loss_coefficient:
           coefficient = coefficient.detach()
        
-        return  -self.alpha * coefficient * logits 
+        return  -self.alpha * coefficient * probs
 
   # TODO: class based focal losses
