@@ -5,7 +5,7 @@ loss functions associated with ctc
 
 TODO:
 - [ ] entmax and entmax losses
-- [ ] kd
+- [x] kd ctc decodernbest strategey
 - [x] suport batch ctc decode not parallel
 - [ ] suport chunk state ctc decode
 - [ ] suport torch sparse tensor 
