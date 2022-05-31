@@ -1,5 +1,7 @@
-# ctcdecoder
-ctc decoder binding for wenet runtime
+# losses
+loss functions associated with ctc
+
+（Note）： ctc decoder binding from  wenet runtime
 
 TODO:
 - [ ] entmax and entmax losses
