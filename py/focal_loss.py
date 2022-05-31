@@ -32,6 +32,6 @@ class SequenceFocalLoss(torch.nn.Module):
         if self.stop_gradient_on_focal_loss_coefficient:
           coefficient = coefficient.detach()
        
-        return  -self.alpha * coefficient * probs
+        return  -self.alpha * coefficient * logits
 
   # TODO: class based focal losses
