@@ -30,5 +30,5 @@ class FocalLoss(torch.nn.Module):
         coefficient = torch.pow(1.0 - probs, self.gamma)
         if self.stop_gradient_on_focal_loss_coefficient:
           coefficient = coefficient.detach()
-        
-        return coefficient * logits
+       
+        return  self.alpha * coefficient * logits 
