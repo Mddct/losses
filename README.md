@@ -10,11 +10,8 @@ TODO:
 - [ ] suport chunk state ctc decode
 - [ ] suport torch sparse tensor 
 - [x] sequence focal loss
-- [ ] custom focal loss
-
-        - [x] cross entropy
-        
-        - [ ] sigmod
+- [x] cross entropy focal loss
+- [ ] sigmod  focal loss
 - [ ] focal logits for mwer
 - [x] mwer loss ssupport
 
