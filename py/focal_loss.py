@@ -34,6 +34,7 @@ class SequenceFocalLoss(torch.nn.Module):
        
         return  -self.alpha * coefficient * logits
 
+# TODO: alpha can be a [C] weight for each class, to support
 class SoftmaxCrossEntropyFocalLoss(torch.nn.Module):
 
     def __init__(
