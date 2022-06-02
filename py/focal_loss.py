@@ -49,7 +49,11 @@ class SoftmaxCrossEntropyFocalLoss(torch.nn.Module):
         self.stop_gradient_on_focal_loss_coefficient = stop_gradient_on_focal_loss_coefficient
         self.softmax_cross_entropy_loss = torch.nn.NLLLoss(reduction="none")
 
-    def forward(self, logits: torch.Tensor, labels: torch.Tenor) -> torch.Tensor:
+    def forward(self, 
+                logits: torch.Tensor, 
+                labels: torch.Tenor,
+                labels_probs, torch.Tensor = None,
+               ) -> torch.Tensor:
         """Calculate focal loss.
         (Note): using 
         Args:
@@ -57,7 +61,12 @@ class SoftmaxCrossEntropyFocalLoss(torch.nn.Module):
         Returns:
             loss[i..., j] = - αₜ(1-pₜ)ˠlog(pₜ)
         """
-        loss = self.softmax_cross_entropy_loss(logits, labels)
+        if labels_probs is not None:
+            log_probs = torch.nn.functional.log_softmax(logits, dim=-1)
+            # average 
+            loss = -(log_probs*logits)
+        else:
+            loss = self.softmax_cross_entropy_loss(logits, labels)
         
         # TODO: apply focal loss helper to resue code
         probs = torch.exp(-loss)
