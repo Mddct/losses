@@ -11,6 +11,8 @@ TODO:
 - [ ] suport torch sparse tensor 
 - [x] sequence focal loss
 - [ ] custom focal loss
+        - [x] cross entropy
+        - [ ] sigmod
 - [ ] focal logits for mwer
 - [x] mwer loss ssupport
 
