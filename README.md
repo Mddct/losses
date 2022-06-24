@@ -7,6 +7,7 @@ TODO:
 - [ ] entmax and entmax losses
 - [x] kd ctc decodernbest strategey
 - [x] suport batch ctc decode not parallel
+- [x] suport batch ctc decode parallel
 - [ ] suport chunk state ctc decode
 - [ ] suport torch sparse tensor 
 - [x] sequence focal loss
