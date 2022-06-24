@@ -89,7 +89,7 @@ parallel_ctc_beam_search_decoder(uintptr_t pdata, int max_time, int bs,
     // future result
     std::vector<DecodeResult> batch_results;
     for (int i =0 ; i < bs; i++){
-      batch_results.emplace_back(res[i].get(0)[0]);
+      batch_results.emplace_back(res[i].get()[0]);
     }
   }
 }
