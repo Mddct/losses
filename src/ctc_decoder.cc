@@ -62,9 +62,10 @@ parallel_ctc_beam_search_decoder(uintptr_t pdata, int max_time, int bs,
                                  int num_classes, uintptr_t psequence_length,
                                  int n_sequence_length, int beam_width,
                                  int top_path) {
+  std::vector<DecodeResult> batch_results;
   if (max_time <= 0 || bs <= 0 || num_classes <= 0 || n_sequence_length <= 0 ||
       beam_width <= 0 || top_path <= 0) {
-    return results;
+    return batch_results;
   }
 
   auto *data = reinterpret_cast<float *>(pdata);
@@ -85,11 +86,10 @@ parallel_ctc_beam_search_decoder(uintptr_t pdata, int max_time, int bs,
                                     num_classes, next_sequence_length, 1,
                                     beam_width, top_path));
     }
-
     // future result
-    std::vector<DecodeResult> batch_results;
     for (int i =0 ; i < bs; i++){
       batch_results.emplace_back(res[i].get()[0]);
     }
   }
+    
 }
