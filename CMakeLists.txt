@@ -29,6 +29,7 @@ add_library(ctc_prefix_beam_search STATIC
   src/wenet/runtime/core/decoder/ctc_prefix_beam_search.cc
   src/wenet/runtime/core/decoder/context_graph.cc
   src/wenet/runtime/core/utils/utils.cc
+  src/wenet/runtime/core/utils/thread_pool.h
   src/wenet/runtime/core/utils/string.cc
   )
 target_link_libraries(ctc_prefix_beam_search PUBLIC fst)
