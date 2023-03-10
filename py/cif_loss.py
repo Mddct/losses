@@ -1,6 +1,6 @@
 import torch
 
-class CtcBoundaryLoss(torch.nn.Module):
+class CtcBoundaryLossV3(torch.nn.Module):
     """ https://arxiv.org/pdf/2104.04702.pdf
     """
 
@@ -12,8 +12,11 @@ class CtcBoundaryLoss(torch.nn.Module):
         self.blank = blank_id
 
     def forward(self, alpha: torch.Tensor, ctc_log_probs: torch.Tensor,
-                mask: torch.Tensor):
-
+                mask: torch.Tensor, text_length: torch.Tensor):
+        # alpha: torch.Tensor [B, T]
+        # boundary: torch.Tensor [B,T]
+        # mask: [B,T]
+        text_mask = make_non_pad_mask(text_length)
         batch_size = alpha.size(0)
         ctc_blank_probs = ctc_log_probs[:, :, self.blank]
         triggerd = (1 - ctc_blank_probs) > self.spike_threshold
@@ -26,7 +29,10 @@ class CtcBoundaryLoss(torch.nn.Module):
         index = torch.arange(alpha.size(1),
                              device=alpha.device).unsqueeze(0)  #[1,L]
         boundary_loss_list = []
-
+        zero = torch.tensor([0.0],
+                            dtype=alpha.dtype,
+                            device=alpha.device,
+                            requires_grad=False)
         # TODO(Mddct): refactor later by vector
         for (i, spike) in enumerate(spikes):
             spike = torch.nonzero(spike).squeeze(1)
@@ -38,11 +44,15 @@ class CtcBoundaryLoss(torch.nn.Module):
                 m = m <= end.unsqueeze(1)
 
                 loss_i_j = alpha[i:i + 1, :] * m  # [1, L]
-                loss_i_j = torch.sum(loss_i_j, 1)
-                boundary_loss_list.append(torch.sum(torch.abs(loss_i_j - 1)))
-        if len(boundary_loss_list) > 0:
-            loss = torch.stack(boundary_loss_list, dim=0)
-            return loss.sum() / loss.size(0)
-        else:
-            return torch.tensor(0.0, dtype=torch.float32,
-                                device=alpha.device).detach()
+                loss_i_j = torch.sum(loss_i_j, 1)  # [L]
+                boundary_loss_list.append(loss_i_j)
+            else:
+                boundary_loss_list.append(zero)
+        boundary = torch.nn.utils.rnn.pad_sequence(boundary_loss_list,
+                                                   batch_first=True)
+        length = min(boundary.size(1), text_mask.size(1))
+        mask = text_mask[:, :length]
+        boundary = boundary[:, :length]
+
+        return torch.sum(torch.abs(boundary - 1) * mask,
+                         dim=1).sum() / batch_size
