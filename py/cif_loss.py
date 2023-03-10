@@ -40,9 +40,9 @@ class CtcBoundaryLossV3(torch.nn.Module):
                 # [] or [1] not considered
                 start = spike[:-1]
                 end = spike[1:]
-                m = index >= start.unsqueeze(1)
-                m = m <= end.unsqueeze(1)
-
+                l = index >= start.unsqueeze(1)
+                r = index <= end.unsqueeze(1)
+                m = l & r
                 loss_i_j = alpha[i:i + 1, :] * m  # [1, L]
                 loss_i_j = torch.sum(loss_i_j, 1)  # [L]
                 boundary_loss_list.append(loss_i_j)
