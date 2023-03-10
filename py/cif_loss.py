@@ -29,7 +29,7 @@ class CtcBoundaryLossV3(torch.nn.Module):
         index = torch.arange(alpha.size(1),
                              device=alpha.device).unsqueeze(0)  #[1,L]
         boundary_loss_list = []
-        zero = torch.tensor([0.0],
+        ones = torch.tensor([1.0],
                             dtype=alpha.dtype,
                             device=alpha.device,
                             requires_grad=False)
@@ -47,7 +47,7 @@ class CtcBoundaryLossV3(torch.nn.Module):
                 loss_i_j = torch.sum(loss_i_j, 1)  # [L]
                 boundary_loss_list.append(loss_i_j)
             else:
-                boundary_loss_list.append(zero)
+                boundary_loss_list.append(ones)
         boundary = torch.nn.utils.rnn.pad_sequence(boundary_loss_list,
                                                    batch_first=True)
         length = min(boundary.size(1), text_mask.size(1))
