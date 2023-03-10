@@ -1,5 +1,5 @@
 # losses
-loss functions associated with ctc
+loss functions associated with ctc and cif
 
 (Note)： ctc decoder binding from  wenet runtime
 
