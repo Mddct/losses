@@ -25,7 +25,7 @@ class CtcBoundaryLossV3(torch.nn.Module):
                            1,
                            dtype=spikes.dtype,
                            device=spikes.device)
-        spikes = torch.cat([begin, spikes], dim=1)
+        spikes = torch.cat([begin, spikes[:,1:]], dim=1)
         index = torch.arange(alpha.size(1),
                              device=alpha.device).unsqueeze(0)  #[1,L]
         boundary_loss_list = []
