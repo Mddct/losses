@@ -19,7 +19,7 @@ class CtcBoundaryLossV3(torch.nn.Module):
         text_mask = make_non_pad_mask(text_length)
         batch_size = alpha.size(0)
         ctc_blank_probs = ctc_log_probs[:, :, self.blank]
-        triggerd = (1 - ctc_blank_probs) > self.spike_threshold
+        triggerd = (math.log(1) - ctc_blank_probs) > self.spike_threshold
         spikes = triggerd * mask
         begin = torch.ones(batch_size,
                            1,
@@ -29,7 +29,8 @@ class CtcBoundaryLossV3(torch.nn.Module):
         index = torch.arange(alpha.size(1),
                              device=alpha.device).unsqueeze(0)  #[1,L]
         boundary_loss_list = []
-        ones = torch.tensor([1.0],
+        # math.log(1) == 0
+        ones = torch.tensor([0.0],
                             dtype=alpha.dtype,
                             device=alpha.device,
                             requires_grad=False)
