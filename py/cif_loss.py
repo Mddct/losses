@@ -16,13 +16,14 @@ class CtcBoundaryLossV3(torch.nn.Module):
         # alpha: torch.Tensor [B, T]
         # boundary: torch.Tensor [B,T]
         # mask: [B,T]
-        text_mask = make_non_pad_mask(text_length)
-        batch_size = alpha.size(0)
-        ctc_blank_probs = ctc_log_probs[:, :, self.blank]
-        triggerd = ctc_blank_probs < self.spike_threshold
-        spikes = triggerd * mask
-        index = torch.arange(alpha.size(1),
-                             device=alpha.device).unsqueeze(0)  #[1,L]
+        with torch.no_grad():
+            text_mask = make_non_pad_mask(text_length)
+            batch_size = alpha.size(0)
+            ctc_blank_probs = ctc_log_probs[:, :, self.blank]
+            triggerd = ctc_blank_probs < self.spike_threshold
+            spikes = triggerd * mask
+            index = torch.arange(alpha.size(1),
+                                 device=alpha.device).unsqueeze(0)  #[1,L]
         boundary_loss_list = []
         # math.log(1) == 0
         ones = torch.tensor([0.0],
