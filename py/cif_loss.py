@@ -21,11 +21,6 @@ class CtcBoundaryLossV3(torch.nn.Module):
         ctc_blank_probs = ctc_log_probs[:, :, self.blank]
         triggerd = ctc_blank_probs < self.spike_threshold
         spikes = triggerd * mask
-        begin = torch.ones(batch_size,
-                           1,
-                           dtype=spikes.dtype,
-                           device=spikes.device)
-        spikes = torch.cat([begin, spikes[:,1:]], dim=1)
         index = torch.arange(alpha.size(1),
                              device=alpha.device).unsqueeze(0)  #[1,L]
         boundary_loss_list = []
