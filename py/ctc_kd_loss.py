@@ -21,7 +21,7 @@ class PFRLoss(torch.nn.Module):
         tea = torch.nn.functional.softmax(tea)
 
         kl = torch.nn.functional.kl_div(stu, tea, reduction='none')
-        kl = kl * mask.transpose(1,2)
+        kl = kl * mask[:,:,1:]transpose(1,2)
         return kl.sum() / kl.size(0)
 
 class CTCKDLoss(torch.nn.Module):
