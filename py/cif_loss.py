@@ -15,7 +15,7 @@ class PTRLoss(torch.nn.Module):
 
         ptr = post_frames * torch.log(post_frames /
                                       (prev_frames + self.eps))  # [B,T-1]
-        ptr = ptr.sum(-1)
+        ptr = -ptr.sum(-1)
         return ptr.sum() / ptr.size(0)
 
 class CtcBoundaryLossV3(torch.nn.Module):
