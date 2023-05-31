@@ -22,7 +22,7 @@ class PFRLoss(torch.nn.Module):
 
         kl = torch.nn.functional.kl_div(stu, tea, reduction='none')
         kl = kl * mask[:, 1:, :]
-        return kl.sum(-1).sum(-1) / kl.size()
+        return kl.sum() / kl.size(0)
 
 class CTCKDLoss(torch.nn.Module):
     ''' CTCKDLoss is class for nbest strategy knowledge distill
