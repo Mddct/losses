@@ -2,6 +2,23 @@ import torch
 
 from ctcdecoder import CTCDecoder
 
+class PFRLoss(torch.nn.Module):
+
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.eps = 1e-5
+
+    def forward(self, logits: torch.Tensor, mask: torch.Tensor):
+        """ logits: [B,T,V], log probs
+            mask: [B,1,T]
+        """
+        post = logits[:, 1:, :]
+        prev = logits[:, :-1, :]
+
+        kl = torch.nn.functional.kl_div(post, prev, reduction='none')
+        kl = kl * mask[:, :-1, :]
+        return kl.sum(-1).sum(-1) / kl.size()
+
 class CTCKDLoss(torch.nn.Module):
     ''' CTCKDLoss is class for nbest strategy knowledge distill
     '''
