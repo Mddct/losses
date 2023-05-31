@@ -4,18 +4,23 @@ from ctcdecoder import CTCDecoder
 
 class PFRLoss(torch.nn.Module):
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, tempature: float = 10, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.eps = 1e-5
+        self.tempature = tempature
 
     def forward(self, logits: torch.Tensor, mask: torch.Tensor):
         """ logits: [B,T,V], log probs
             mask: [B,1,T]
         """
-        post = logits[:, 1:, :]
-        prev = logits[:, :-1, :]
+        # log softmax
+        logits = logits.exp() / self.tempature
+        stu = logits[:, 1:, :]
+        tea = logits[:, :-1, :]
 
-        kl = torch.nn.functional.kl_div(post, prev, reduction='none')
+        stu = torch.nn.functional.log_softmax(stu)
+        tea = torch.nn.functional.softmax(tea)
+
+        kl = torch.nn.functional.kl_div(stu, tea, reduction='none')
         kl = kl * mask[:, 1:, :]
         return kl.sum(-1).sum(-1) / kl.size()
 
