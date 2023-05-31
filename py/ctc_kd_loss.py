@@ -16,7 +16,7 @@ class PFRLoss(torch.nn.Module):
         prev = logits[:, :-1, :]
 
         kl = torch.nn.functional.kl_div(post, prev, reduction='none')
-        kl = kl * mask[:, :-1, :]
+        kl = kl * mask[:, 1:, :]
         return kl.sum(-1).sum(-1) / kl.size()
 
 class CTCKDLoss(torch.nn.Module):
