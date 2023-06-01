@@ -14,15 +14,16 @@ class PFRLoss(torch.nn.Module):
         """
         # log softmax
         logits = logits.exp() / self.tempature
-        stu = logits[:, 1:, :]
-        tea = logits[:, :-1, :]
+        tea = logits[:, 1:, :]
+        stu = logits[:, :-1, :]
 
-        stu = torch.nn.functional.log_softmax(stu)
-        tea = torch.nn.functional.softmax(tea)
+        stu = torch.nn.functional.log_softmax(stu, dim=-1)
+        tea = torch.nn.functional.softmax(tea, dim=-1)
 
         kl = torch.nn.functional.kl_div(stu, tea, reduction='none')
         kl = kl * mask[:,:,1:].transpose(1,2)
         return kl.sum() / kl.size(0)
+
 
 class CTCKDLoss(torch.nn.Module):
     ''' CTCKDLoss is class for nbest strategy knowledge distill
